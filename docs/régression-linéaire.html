@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapitre 2 Régression Linéaire | Introduction au machine learning avec tidymodels</title>
+  <meta name="description" content="Chapitre 2 Régression Linéaire | Introduction au machine learning avec tidymodels" />
+  <meta name="generator" content="bookdown 0.22 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapitre 2 Régression Linéaire | Introduction au machine learning avec tidymodels" />
+  <meta property="og:type" content="book" />
+  
+  
+  
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapitre 2 Régression Linéaire | Introduction au machine learning avec tidymodels" />
+  
+  
+  
+
+<meta name="author" content="Priestley Muhindo" />
+
+
+<meta name="date" content="2021-06-01" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="index.html"/>
+<link rel="next" href="cross-validation.html"/>
+<script src="libs/header-attrs-2.8/header-attrs.js"></script>
+<script src="libs/jquery-3.5.1/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
+<script src="libs/htmlwidgets-1.5.3.9000/htmlwidgets.js"></script>
+<link href="libs/datatables-css-0.0.0/datatables-crosstalk.css" rel="stylesheet" />
+<script src="libs/datatables-binding-0.18/datatables.js"></script>
+<link href="libs/dt-core-1.10.20/css/jquery.dataTables.min.css" rel="stylesheet" />
+<link href="libs/dt-core-1.10.20/css/jquery.dataTables.extra.css" rel="stylesheet" />
+<script src="libs/dt-core-1.10.20/js/jquery.dataTables.min.js"></script>
+<link href="libs/dt-ext-scroller-1.10.20/css/scroller.dataTables.min.css" rel="stylesheet" />
+<script src="libs/dt-ext-scroller-1.10.20/js/dataTables.scroller.min.js"></script>
+<link href="libs/dt-ext-fixedcolumns-1.10.20/css/fixedColumns.dataTables.min.css" rel="stylesheet" />
+<script src="libs/dt-ext-fixedcolumns-1.10.20/js/dataTables.fixedColumns.min.js"></script>
+<script src="libs/jszip-1.10.20/jszip.min.js"></script>
+<script src="libs/pdfmake-1.10.20/pdfmake.js"></script>
+<script src="libs/pdfmake-1.10.20/vfs_fonts.js"></script>
+<link href="libs/dt-ext-buttons-1.10.20/css/buttons.dataTables.min.css" rel="stylesheet" />
+<script src="libs/dt-ext-buttons-1.10.20/js/dataTables.buttons.min.js"></script>
+<script src="libs/dt-ext-buttons-1.10.20/js/buttons.flash.min.js"></script>
+<script src="libs/dt-ext-buttons-1.10.20/js/buttons.html5.min.js"></script>
+<script src="libs/dt-ext-buttons-1.10.20/js/buttons.colVis.min.js"></script>
+<script src="libs/dt-ext-buttons-1.10.20/js/buttons.print.min.js"></script>
+<link href="libs/dt-ext-select-1.10.20/css/select.dataTables.min.css" rel="stylesheet" />
+<script src="libs/dt-ext-select-1.10.20/js/dataTables.select.min.js"></script>
+<link href="libs/crosstalk-1.1.1.9000/css/crosstalk.css" rel="stylesheet" />
+<script src="libs/crosstalk-1.1.1.9000/js/crosstalk.min.js"></script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">A Minimal Book Example</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Importation de Données</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#chargement-des-librairies"><i class="fa fa-check"></i><b>1.1</b> Chargement des librairies</a></li>
+<li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#importation-des-données"><i class="fa fa-check"></i><b>1.2</b> importation des données</a></li>
+<li class="chapter" data-level="1.3" data-path="index.html"><a href="index.html#visualisation-des-données"><i class="fa fa-check"></i><b>1.3</b> Visualisation des données</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="régression-linéaire.html"><a href="régression-linéaire.html"><i class="fa fa-check"></i><b>2</b> Régression Linéaire</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="régression-linéaire.html"><a href="régression-linéaire.html#partitionnement"><i class="fa fa-check"></i><b>2.1</b> Partitionnement</a></li>
+<li class="chapter" data-level="2.2" data-path="régression-linéaire.html"><a href="régression-linéaire.html#exploration-des-estimateurs-du-modèle"><i class="fa fa-check"></i><b>2.2</b> Exploration des estimateurs du modèle</a></li>
+<li class="chapter" data-level="2.3" data-path="régression-linéaire.html"><a href="régression-linéaire.html#significativité-globale-du-modèle"><i class="fa fa-check"></i><b>2.3</b> Significativité globale du modèle</a></li>
+<li class="chapter" data-level="2.4" data-path="régression-linéaire.html"><a href="régression-linéaire.html#mesure-de-limportance-des-prédicteurs-dans-la-construction-du-modèle"><i class="fa fa-check"></i><b>2.4</b> Mesure de l’importance des prédicteurs dans la construction du modèle</a></li>
+<li class="chapter" data-level="2.5" data-path="régression-linéaire.html"><a href="régression-linéaire.html#la-métrique-rmse"><i class="fa fa-check"></i><b>2.5</b> La métrique RMSE</a></li>
+<li class="chapter" data-level="2.6" data-path="régression-linéaire.html"><a href="régression-linéaire.html#qualité-du-modèle-au-test-set"><i class="fa fa-check"></i><b>2.6</b> Qualité du modèle au test set</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="cross-validation.html"><a href="cross-validation.html"><i class="fa fa-check"></i><b>3</b> Cross-validation</a></li>
+<li class="chapter" data-level="4" data-path="meilleurs-hyperparamètres.html"><a href="meilleurs-hyperparamètres.html"><i class="fa fa-check"></i><b>4</b> Meilleurs hyperparamètres</a></li>
+<li class="chapter" data-level="" data-path="modélisation.html"><a href="modélisation.html"><i class="fa fa-check"></i>Modélisation</a></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Introduction au machine learning avec tidymodels</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="régression-linéaire" class="section level1" number="2">
+<h1><span class="header-section-number">Chapitre 2</span> Régression Linéaire</h1>
+<div id="partitionnement" class="section level2" number="2.1">
+<h2><span class="header-section-number">2.1</span> Partitionnement</h2>
+<p>Nous allons utiliser un modèle linéaire avec variables qualitatives en mettant en exergue l’interraction car nous avons à la fois un prédicteur continu et un prédicteur catégoriel. Étant donné que les pentes semblent être différentes pour au moins deux des régimes d’alimentation, construisons un modèle qui permet des interactions bidirectionnelles. Spécifier une formule R avec nos variables de cette manière : Formule du modele et package</p>
+</div>
+<div id="exploration-des-estimateurs-du-modèle" class="section level2" number="2.2">
+<h2><span class="header-section-number">2.2</span> Exploration des estimateurs du modèle</h2>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="régression-linéaire.html#cb1-1" aria-hidden="true" tabindex="-1"></a>lm_fit <span class="ot">&lt;-</span> lm_mod <span class="sc">%&gt;%</span> <span class="fu">fit</span>(largeur<span class="sc">~</span>.,<span class="at">data =</span> urchins_train_d)</span></code></pre></div>
+<p><img src="Premiers-pas-avec-bookdown_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+<p><img src="Premiers-pas-avec-bookdown_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+<p>Affichons ces résultats sous forme de tiddy format:</p>
+<div id="htmlwidget-2d3a022e0cd5dd3e530b" style="width:100%;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-2d3a022e0cd5dd3e530b">{"x":{"filter":"none","extensions":["Scroller","FixedColumns","Buttons","Select"],"data":[["(Intercept)","regime_alimPauvre","regime_alimRiche","taille"],[0.0446934090160601,-0.0098546234669611,0.0232171978590986,0.00109734311816532],[0.00745776116996023,0.00682713589041976,0.00689917639695841,0.000252737978415219],[5.99287212308227,-1.44344914545933,3.36521296503366,4.34182122151231],[1.85847688126797e-07,0.154779054919908,0.00142844424952332,6.39893032731631e-05]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th>term<\/th>\n      <th>estimate<\/th>\n      <th>std.error<\/th>\n      <th>statistic<\/th>\n      <th>p.value<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"dom":"Bfrtip","scrollY":200,"scrollX":400,"scroller":true,"fixedColumns":{"leftColumns":1},"select":{"style":"os","items":"row"},"buttons":["copy","csv","excel","pdf","print","colvis","selectAll","selectNone","selectRows","selectColumns","selectCells"],"columnDefs":[{"className":"dt-right","targets":[1,2,3,4]}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
+<p><img src="Premiers-pas-avec-bookdown_files/figure-html/graph des paramètres-1.png" width="672" /></p>
+<p>Faisons une simulation en prédisant la largeur pour un oursin ayant une taille de 2O ml ayant à l’état initial un régime alimentaire initial,pauvre ou riche</p>
+<p>Voici quelques prévisions pour ce genre d’oursin</p>
+<p>Voici quelques prévisions pour ce genre d’oursin</p>
+<p>Visualisons les différences par un graphique de type dotcharts</p>
+<p><img src="Premiers-pas-avec-bookdown_files/figure-html/graphe%20des%20comparaisons-1.png" width="672" /></p>
+<p><img src="Premiers-pas-avec-bookdown_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+</div>
+<div id="significativité-globale-du-modèle" class="section level2" number="2.3">
+<h2><span class="header-section-number">2.3</span> Significativité globale du modèle</h2>
+<p>Nous devons mesurer le niveau de prédiction de notre mod</p>
+<div id="htmlwidget-0a9c5a3f5751b2ff223a" style="width:100%;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-0a9c5a3f5751b2ff223a">{"x":{"filter":"none","data":[["1"],[0.397988906961768],[0.363912807355831],[0.0209988358180827],[11.6794149437344],[5.50931356189694e-06],[3],[141.401577166068],[-272.803154332137],[-262.587897992964],[0.0233704086028841],[53],[57]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>r.squared<\/th>\n      <th>adj.r.squared<\/th>\n      <th>sigma<\/th>\n      <th>statistic<\/th>\n      <th>p.value<\/th>\n      <th>df<\/th>\n      <th>logLik<\/th>\n      <th>AIC<\/th>\n      <th>BIC<\/th>\n      <th>deviance<\/th>\n      <th>df.residual<\/th>\n      <th>nobs<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[{"className":"dt-right","targets":[1,2,3,4,5,6,7,8,9,10,11,12]},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
+</div>
+<div id="mesure-de-limportance-des-prédicteurs-dans-la-construction-du-modèle" class="section level2" number="2.4">
+<h2><span class="header-section-number">2.4</span> Mesure de l’importance des prédicteurs dans la construction du modèle</h2>
+<p><img src="Premiers-pas-avec-bookdown_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+<p>La variable taille de l’Oursin contribue le plus dans la détermination du modèle</p>
+</div>
+<div id="la-métrique-rmse" class="section level2" number="2.5">
+<h2><span class="header-section-number">2.5</span> La métrique RMSE</h2>
+<div id="htmlwidget-2d922a6473077fc2f14a" style="width:100%;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-2d922a6473077fc2f14a">{"x":{"filter":"none","data":[["1"],["rmse"],["standard"],[0.0274186832344219]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>.metric<\/th>\n      <th>.estimator<\/th>\n      <th>.estimate<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[{"className":"dt-right","targets":3},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
+</div>
+<div id="qualité-du-modèle-au-test-set" class="section level2" number="2.6">
+<h2><span class="header-section-number">2.6</span> Qualité du modèle au test set</h2>
+<div id="htmlwidget-06f3da0bab48d354ca06" style="width:100%;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-06f3da0bab48d354ca06">{"x":{"filter":"none","editable":{"target":"cell","disable":{"columns":null}},"autoHideNavigation":true,"data":[["1"],["rsq"],["standard"],[0.307684889854761]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>.metric<\/th>\n      <th>.estimator<\/th>\n      <th>.estimate<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[{"className":"dt-right","targets":3},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
+<p>Ce modèle prédit dans la vraie vie seulement 30.8% des cas</p>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="index.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="cross-validation.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["Premiers pas avec bookdown.pdf", "Premiers pas avec bookdown.epub"],
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+</body>
+
+</html>

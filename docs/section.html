@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapitre 3  | Introduction au machine learning avec tidymodels</title>
+  <meta name="description" content="Chapitre 3  | Introduction au machine learning avec tidymodels" />
+  <meta name="generator" content="bookdown 0.22 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapitre 3  | Introduction au machine learning avec tidymodels" />
+  <meta property="og:type" content="book" />
+  
+  
+  
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapitre 3  | Introduction au machine learning avec tidymodels" />
+  
+  
+  
+
+<meta name="author" content="Priestley Muhindo" />
+
+
+<meta name="date" content="2021-06-01" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="régression-linéaire.html"/>
+<link rel="next" href="cross-validation.html"/>
+<script src="libs/header-attrs-2.8/header-attrs.js"></script>
+<script src="libs/jquery-3.5.1/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
+<script src="libs/htmlwidgets-1.5.3.9000/htmlwidgets.js"></script>
+<link href="libs/datatables-css-0.0.0/datatables-crosstalk.css" rel="stylesheet" />
+<script src="libs/datatables-binding-0.18/datatables.js"></script>
+<link href="libs/dt-core-1.10.20/css/jquery.dataTables.min.css" rel="stylesheet" />
+<link href="libs/dt-core-1.10.20/css/jquery.dataTables.extra.css" rel="stylesheet" />
+<script src="libs/dt-core-1.10.20/js/jquery.dataTables.min.js"></script>
+<link href="libs/dt-ext-scroller-1.10.20/css/scroller.dataTables.min.css" rel="stylesheet" />
+<script src="libs/dt-ext-scroller-1.10.20/js/dataTables.scroller.min.js"></script>
+<link href="libs/dt-ext-fixedcolumns-1.10.20/css/fixedColumns.dataTables.min.css" rel="stylesheet" />
+<script src="libs/dt-ext-fixedcolumns-1.10.20/js/dataTables.fixedColumns.min.js"></script>
+<script src="libs/jszip-1.10.20/jszip.min.js"></script>
+<script src="libs/pdfmake-1.10.20/pdfmake.js"></script>
+<script src="libs/pdfmake-1.10.20/vfs_fonts.js"></script>
+<link href="libs/dt-ext-buttons-1.10.20/css/buttons.dataTables.min.css" rel="stylesheet" />
+<script src="libs/dt-ext-buttons-1.10.20/js/dataTables.buttons.min.js"></script>
+<script src="libs/dt-ext-buttons-1.10.20/js/buttons.flash.min.js"></script>
+<script src="libs/dt-ext-buttons-1.10.20/js/buttons.html5.min.js"></script>
+<script src="libs/dt-ext-buttons-1.10.20/js/buttons.colVis.min.js"></script>
+<script src="libs/dt-ext-buttons-1.10.20/js/buttons.print.min.js"></script>
+<link href="libs/dt-ext-select-1.10.20/css/select.dataTables.min.css" rel="stylesheet" />
+<script src="libs/dt-ext-select-1.10.20/js/dataTables.select.min.js"></script>
+<link href="libs/crosstalk-1.1.1.9000/css/crosstalk.css" rel="stylesheet" />
+<script src="libs/crosstalk-1.1.1.9000/js/crosstalk.min.js"></script>
+
+
+
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">A Minimal Book Example</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Importation de Données</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#chargement-des-librairies"><i class="fa fa-check"></i><b>1.1</b> Chargement des librairies</a></li>
+<li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#importation-des-données"><i class="fa fa-check"></i><b>1.2</b> importation des données</a></li>
+<li class="chapter" data-level="1.3" data-path="index.html"><a href="index.html#visualisation-des-données"><i class="fa fa-check"></i><b>1.3</b> Visualisation des données</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="régression-linéaire.html"><a href="régression-linéaire.html"><i class="fa fa-check"></i><b>2</b> Régression Linéaire</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="régression-linéaire.html"><a href="régression-linéaire.html#partitionnement"><i class="fa fa-check"></i><b>2.1</b> Partitionnement</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="section.html"><a href="section.html"><i class="fa fa-check"></i><b>3</b> </a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="section.html"><a href="section.html#exploration-des-estimateurs-du-modèle"><i class="fa fa-check"></i><b>3.1</b> Exploration des estimateurs du modèle</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="cross-validation.html"><a href="cross-validation.html"><i class="fa fa-check"></i><b>4</b> Cross-validation</a></li>
+<li class="chapter" data-level="5" data-path="meilleurs-hyperparamètres.html"><a href="meilleurs-hyperparamètres.html"><i class="fa fa-check"></i><b>5</b> Meilleurs hyperparamètres</a></li>
+<li class="chapter" data-level="" data-path="modélisation.html"><a href="modélisation.html"><i class="fa fa-check"></i>Modélisation</a></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Introduction au machine learning avec tidymodels</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="section" class="section level1" number="3">
+<h1><span class="header-section-number">Chapitre 3</span> </h1>
+<p>Nous allons utiliser un modèle linéaire avec variables qualitatives en mettant en exergue l’interraction car nous avons à la fois un prédicteur continu et un prédicteur catégoriel. Étant donné que les pentes semblent être différentes pour au moins deux des régimes d’alimentation, construisons un modèle qui permet des interactions bidirectionnelles. Spécifier une formule R avec nos variables de cette manière : Formule du modele et package</p>
+<div id="exploration-des-estimateurs-du-modèle" class="section level2" number="3.1">
+<h2><span class="header-section-number">3.1</span> Exploration des estimateurs du modèle</h2>
+<pre><code></code></pre>
+<p><img src="Premiers-pas-avec-bookdown_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
+<p><img src="Premiers-pas-avec-bookdown_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+<p>Affichons ces résultats sous forme de tiddy format:</p>
+<div id="htmlwidget-a3d0429556697c9073f0" style="width:100%;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-a3d0429556697c9073f0">{"x":{"filter":"none","extensions":["Scroller","FixedColumns","Buttons","Select"],"data":[["(Intercept)","taille","regime_alimPauvre","regime_alimRiche","taille:regime_alimPauvre","taille:regime_alimRiche"],[0.0246422277085396,0.00170471544418636,0.0259720236674373,0.0352343436410943,-0.00133765675328693,-8.13558641338643e-05],[0.0101022807605155,0.000400782403006731,0.0138632690112672,0.0153772037333504,0.000536816872696693,0.00073861986957578],[2.43927369400116,4.25346879353315,1.87344151270014,2.29133620468833,-2.49183068066998,-0.110145783352119],[0.0182352467767736,8.9934920991121e-05,0.0667431523258219,0.0261080001486896,0.0160011203083321,0.912726054064813]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th>term<\/th>\n      <th>estimate<\/th>\n      <th>std.error<\/th>\n      <th>statistic<\/th>\n      <th>p.value<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"dom":"Bfrtip","scrollY":200,"scrollX":400,"scroller":true,"fixedColumns":{"leftColumns":1},"select":{"style":"os","items":"row"},"buttons":["copy","csv","excel","pdf","print","colvis","selectAll","selectNone","selectRows","selectColumns","selectCells"],"columnDefs":[{"className":"dt-right","targets":[1,2,3,4]}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
+<p><img src="Premiers-pas-avec-bookdown_files/figure-html/graph des paramètres-1.png" width="672" /></p>
+<p>Faisons une simulation en prédisant la largeur pour un oursin ayant une taille de 2O ml ayant à l’état initial un régime alimentaire initial,pauvre ou riche</p>
+<p>Voici quelques prévisions pour ce genre d’oursin</p>
+<p>Voici quelques prévisions pour ce genre d’oursin</p>
+<p>Visualisons les différences par un graphique de type dotcharts</p>
+<p><img src="Premiers-pas-avec-bookdown_files/figure-html/graphe%20des%20comparaisons-1.png" width="672" /></p>
+<p><img src="Premiers-pas-avec-bookdown_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="régression-linéaire.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="cross-validation.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["Premiers pas avec bookdown.pdf", "Premiers pas avec bookdown.epub"],
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+</body>
+
+</html>

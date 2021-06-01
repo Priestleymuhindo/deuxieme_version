@@ -1,0 +1,13 @@
+importation-de-données
+chargement-des-librairies
+importation-des-données
+visualisation-des-données
+régression-linéaire
+partitionnement
+exploration-des-estimateurs-du-modèle
+significativité-globale-du-modèle
+mesure-de-limportance-des-prédicteurs-dans-la-construction-du-modèle
+la-métrique-rmse
+qualité-du-modèle-au-test-set
+cross-validation
+meilleurs-hyperparamètres

@@ -1,0 +1,150 @@
+# Régression Linéaire
+
+## Partitionnement 
+
+```{r ,echo=FALSE,message=FALSE,warning=FALSE}
+urchins_train <- initial_split(data=urchins,prop = 0.8)
+urchins_train_d <- training(urchins_train)
+urchins_test_d <- testing(urchins_train)
+```
+
+Nous allons utiliser un modèle linéaire avec variables qualitatives en mettant en exergue l'interraction car nous avons à la fois un prédicteur continu et un prédicteur catégoriel. Étant donné que les pentes semblent être différentes pour au moins deux des régimes d'alimentation, construisons un modèle qui permet des interactions bidirectionnelles. Spécifier une formule R avec nos variables de cette manière : Formule du modele et package
+
+```{r formule du modele,echo=F,message=FALSE,warning=FALSE}
+
+lm_mod <- 
+  linear_reg() %>% # Précision du modèle
+  set_engine("lm") # Précision du package
+
+```
+
+## Exploration des estimateurs du modèle
+
+```{r,message=FALSE,warning=FALSE}
+lm_fit <- lm_mod %>% fit(largeur~.,data = urchins_train_d)
+```
+
+```{r,echo=FALSE,message=FALSE,warning=F}
+par(mfrow=c(2,2))
+plot(lm_fit$fit,pch=16,col="#006EA1")
+```
+
+```{r,echo=FALSE,message=FALSE,warning=F}
+forest_model(lm_fit$fit,format_options = forest_model_format_options(colour = "red",color = "green"),recalculate_width = T,recalculate_height = T,theme = theme_forest(),breaks = T,factor_separate_line = T)
+```
+
+Affichons ces résultats sous forme de tiddy format:
+
+```{r tiddy data,echo=F,message=FALSE,warning=FALSE}
+ tidy(lm_fit) %>%
+    datatable(rownames = FALSE, 
+            extensions = c("Scroller", "FixedColumns", "Buttons", "Select"), 
+            selection = "none",
+            options = list(
+              dom = "Bfrtip", 
+              # scroll :
+              scrollY = 200, scrollX = 400, scroller = TRUE,
+              # fixer les colonnes : 
+              fixedColumns = list(leftColumns = 1),
+              # selection :
+              select = list(style = 'os', items = 'row'),
+              buttons = c(
+                # enregistrements
+                'copy', 'csv', 'excel', 'pdf', 'print',
+                # visualisation des colonnes
+                'colvis',
+                # selection des elements
+                'selectAll', 'selectNone', 'selectRows', 'selectColumns', 'selectCells'
+              )
+            )
+  )
+
+```
+
+```{r graph des paramètres,echo=F,message=FALSE,warning=FALSE}
+tidy(lm_fit) %>% dwplot(whisker_args = list(color="black"),
+                        style = c("dotwhisker"),
+                        vline = geom_vline(xintercept = 0,
+                                           colour="green",linetype=3))+theme_bw()+theme(legend.position = "None")
+```
+
+Faisons une simulation en prédisant la largeur pour un oursin ayant une taille de 2O ml ayant à l'état initial un régime alimentaire initial,pauvre ou riche
+
+Voici quelques prévisions pour ce genre d'oursin
+
+```{r simulations,echo=FALSE,message=FALSE,warning=F}
+
+newdata <- expand.grid(taille=20,
+
+                       regime_alim=c("initial","Pauvre","Riche"))
+
+
+
+
+```
+
+Voici quelques prévisions pour ce genre d'oursin
+
+```{r prediction des simulations,message=FALSE,warning=FALSE,echo=F}
+newdata_moy <- predict(lm_fit,new_data = newdata )
+newdata_conf <- predict(lm_fit,new_data = newdata,type = "conf_int")
+newdata <- newdata_conf %>% bind_cols(newdata_moy) %>% bind_cols(newdata)
+```
+
+Visualisons les différences par un graphique de type dotcharts
+
+```{r graphe des comparaisons,echo=F,message=FALSE,warning=FALSE}
+ggplot(newdata,aes(x=regime_alim))+
+  geom_point(aes(y=.pred),color="red")+
+  geom_errorbar(aes(ymin=.pred_lower,ymax=.pred_upper))+
+  labs(y="largeur des oursins")+
+  theme_bw()
+```
+
+```{r prediction de données du test set,message=FALSE,warning=FALSE,echo=F}
+newdata_moy <- predict(lm_fit,new_data = urchins_test_d )
+newdata_conf <- predict(lm_fit,new_data = urchins_test_d,type = "conf_int")
+newdata <- urchins_test_d %>% bind_cols(newdata_moy) %>% bind_cols(newdata_conf)
+```
+
+```{r nouveau jeu de données,echo=FALSE,message=FALSE,warning=FALSE}
+ newdata <- newdata %>% group_by(regime_alim) %>% summarise(moy_pred_lower=mean(.pred_lower),moy_pred_upper=mean(.pred_upper),moy_pre=mean(.pred)) %>% ungroup()
+ 
+```
+
+```{r,echo=FALSE,message=FALSE,warning=F}
+ggplot(newdata,aes(x=regime_alim))+
+  geom_point(aes(y=moy_pre),color="red")+
+  geom_errorbar(aes(ymin=moy_pred_lower,ymax=moy_pred_upper))+
+  labs(y="largeur des oursins")+
+  theme_bw()
+```
+
+## Significativité globale du modèle
+Nous devons mesurer le niveau de prédiction de notre mod
+```{r,echo=FALSE,message=FALSE,warning=FALSE}
+glance(lm_fit) %>% datatable()
+```
+
+## Mesure de l'importance des prédicteurs dans la construction du modèle
+```{r,echo=FALSE,message=FALSE,warning=FALSE}
+vip(lm_fit,aesthetics=list(fill="blue"),include_type=T,jitter=T)+theme_clean()
+```
+
+La variable taille de l'Oursin contribue le plus dans la détermination du modèle
+
+## La métrique RMSE
+```{r,echo=FALSE,message=FALSE,warning=FALSE}
+metric <- predict(lm_fit,new_data = urchins_test_d) %>% 
+  select(.pred) %>% transmute(prediction=.pred) %>% bind_cols(urchins_test_d)
+rmse(data = metric,estimate = prediction,truth = largeur) %>% datatable()
+```
+
+## Qualité du modèle au test set
+```{r,echo=FALSE,message=FALSE,warning=FALSE}
+rs <- rsq(metric,estimate =prediction,truth = largeur) 
+rs %>% datatable(editable = T,autoHideNavigation = T)
+```
+Ce modèle prédit dans la vraie vie seulement `r round(rs$.estimate*100,digits=1)`% des cas
+
+

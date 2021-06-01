@@ -1,0 +1,81 @@
+--- 
+title: "Introduction au machine learning avec tidymodels"
+author: "Priestley Muhindo"
+date: "`r Sys.Date()`"
+language: "fr"
+site: bookdown::bookdown_site
+documentclass: book
+bibliography: [book.bib, packages.bib]
+biblio-style: apalike
+link-citations: yes
+
+---
+
+# Importation de Données 
+## Chargement des librairies
+
+```{r Chargement  des librairies,echo=F,message=FALSE,warning=FALSE}
+library(tidymodels)  
+library(vip)
+library(khroma)
+library(readr)       
+library(broom.mixed) # convertir les résultats en tibble
+library(dotwhisker) # Visualisation de données
+library(forcats)
+library(DT)
+library(forestmodel)
+library(ggthemes)
+```
+
+## importation des données
+
+Les données des oursins issues d'une expériaence au laboratoire
+
+```{r Importation des données,echo=F,message=FALSE,warning=FALSE}
+urchins <-read_csv("https://tidymodels.org/start/models/urchins.csv") %>% setNames(c("regime_alim","taille","largeur")) %>% 
+  mutate(regime_alim=factor(regime_alim))
+urchins$regime_alim <- fct_recode(urchins$regime_alim ,
+                                  "initial" = "Initial",
+                                  "Pauvre" = "Low",
+                                  "Riche" = "High")
+urchins$regime_alim <- fct_relevel(urchins$regime_alim,
+                                   "initial","Pauvre","Riche")
+urchins %>% datatable(rownames = FALSE, 
+            extensions = c("Scroller", "FixedColumns", "Buttons", "Select"), 
+            selection = "none",
+            options = list(
+              dom = "Bfrtip", 
+              # scroll :
+              scrollY = 200, scrollX = 400, scroller = TRUE,
+              # fixer les colonnes : 
+              fixedColumns = list(leftColumns = 1),
+              # selection :
+              select = list(style = 'os', items = 'row'),
+              buttons = c(
+                # enregistrements
+                'copy', 'csv', 'excel', 'pdf', 'print',
+                # visualisation des colonnes
+                'colvis',
+                # selection des elements
+                'selectAll', 'selectNone', 'selectRows', 'selectColumns', 'selectCells'
+              )
+            )
+  )
+```
+
+Les données des oursins issues d'une expérience au laboratoire
+
+## Visualisation  des données
+```{r regression linéaire par regime alimentaire,echo=F,message=F,warning=FALSE}
+
+ggplot(urchins,
+       aes(x=taille,y=largeur,group=regime_alim,color=regime_alim))+
+  geom_point(size=3)+
+  geom_smooth(method = "lm",se=F)+
+  theme_bw()+
+  labs(title = "Regréssion de la taille des ursins \nen fonction de la largeur de leurs largeurs \npar régime alimentaire")
+
+```
+ On peut vite remarquer que que la différence se dégage entre les différents régimes alimentaires 
+
+
